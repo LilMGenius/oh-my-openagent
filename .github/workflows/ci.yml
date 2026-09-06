@@ -531,6 +531,7 @@ jobs:
 
       - name: Run published lazycodex-ai smoke commands
         if: needs.ci-mode.outputs.run_heavy == 'true'
+        shell: bash
         env:
           HOME: ${{ runner.temp }}/lazycodex-published-smoke/home
           CODEX_HOME: ${{ runner.temp }}/lazycodex-published-smoke/codex
@@ -563,6 +564,7 @@ jobs:
 
       - name: Install published payloads into an isolated CODEX_HOME
         if: needs.ci-mode.outputs.run_heavy == 'true'
+        shell: bash
         run: |
           set -uo pipefail
           status=0
@@ -582,6 +584,7 @@ jobs:
 
       - name: Write job summary
         if: always()
+        shell: bash
         run: |
           {
             echo "## Published LazyCodex smoke"
