@@ -591,19 +591,21 @@ jobs:
         shell: bash
         run: |
           {
-            echo "## Published LazyCodex smoke"
+            echo "## Published LazyCodex smoke (${{ matrix.os }})"
             echo
             echo "| Field | Value |"
             echo "| --- | --- |"
             echo "| Result | \`${{ job.status }}\` |"
+            echo "| OS | \`${{ matrix.os }}\` |"
             echo "| Workflow | \`${{ github.workflow }}\` |"
             echo "| Event | \`${{ github.event_name }}\` |"
             echo "| Ref | \`${{ github.ref_name }}\` |"
             echo
             echo "### What this job checks"
             echo
+            echo "- Installs the published payloads through \`script/published-install-smoke.mjs\` into a sandbox \`CODEX_HOME\`."
             echo "- Runs non-blocking smoke checks against \`lazycodex-ai@latest\`."
-            echo "- Verifies dry-run install and doctor command routing from an isolated temp directory."
+            echo "- Verifies dry-run install and doctor command routing from an isolated temp directory, on the Linux leg only."
             echo
             echo "### If this fails"
             echo
