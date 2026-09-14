@@ -93,13 +93,11 @@ describe("#given no active plan #when native spawns cross the role boundary", ()
 		expect(variants.length, "no bundled Hephaestus variant to check").toBeGreaterThan(0);
 		for (const variant of variants) {
 			const content = await readFile(new URL(variant, root), "utf8");
-			const examples = [...content.matchAll(/multi_agent_v1[.]spawn_agent[(]([{][^)]*[}])[)]/g)].flatMap(
-				(match) => {
-					const payload = match[1];
-					if (payload === undefined) return [];
-					return [payload.replaceAll("<role>", "explorer")];
-				},
-			);
+			const examples = [...content.matchAll(/multi_agent_v1[.]spawn_agent[(]([{][^)]*[}])[)]/g)].flatMap((match) => {
+				const payload = match[1];
+				if (payload === undefined) return [];
+				return [payload.replaceAll("<role>", "explorer")];
+			});
 			expect(examples.length, `${variant} has no multi_agent_v1 spawn example`).toBeGreaterThan(0);
 			for (const example of examples) {
 				const input = JSON.parse(example) as Record<string, unknown>;
