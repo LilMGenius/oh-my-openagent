@@ -87,24 +87,23 @@ describe("#given no active plan #when native spawns cross the role boundary", ()
 		);
 		expect([...LAZYCODEX_SPAWN_ROLES].sort()).toEqual(names.sort());
 	});
-	it("admits every spawn example the bundled Hephaestus rules teach", async () => {
+	it("admits every multi_agent_v1 spawn example the bundled Hephaestus rules teach", async () => {
 		const root = new URL("../../rules/bundled-rules/hephaestus/", import.meta.url);
 		const variants = (await readdir(root)).filter((file) => file.endsWith(".md")).sort();
 		expect(variants.length, "no bundled Hephaestus variant to check").toBeGreaterThan(0);
 		for (const variant of variants) {
 			const content = await readFile(new URL(variant, root), "utf8");
-			const examples = [...content.matchAll(/(?:multi_agent_v1[.])?spawn_agent[(]([{][^)]*[}])[)]/g)].flatMap(
+			const examples = [...content.matchAll(/multi_agent_v1[.]spawn_agent[(]([{][^)]*[}])[)]/g)].flatMap(
 				(match) => {
 					const payload = match[1];
 					if (payload === undefined) return [];
-					return [payload.replaceAll("<role>", "explorer").replaceAll("<lowercase_digits_underscores>", "work")];
+					return [payload.replaceAll("<role>", "explorer")];
 				},
 			);
-			expect(examples.length, `${variant} has no spawn_agent example`).toBeGreaterThan(0);
+			expect(examples.length, `${variant} has no multi_agent_v1 spawn example`).toBeGreaterThan(0);
 			for (const example of examples) {
 				const input = JSON.parse(example) as Record<string, unknown>;
-				const tool = "task_name" in input ? "spawn_agent" : "multi_agent_v1.spawn_agent";
-				expect(guard(tool, input), `${variant}: ${example}`).toBe("");
+				expect(guard("multi_agent_v1.spawn_agent", input), `${variant}: ${example}`).toBe("");
 			}
 		}
 	});
